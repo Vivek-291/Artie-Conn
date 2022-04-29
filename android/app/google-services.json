@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "567850228059",
+    "project_id": "artie-conn",
+    "storage_bucket": "artie-conn.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:567850228059:android:2df987e45a5090e06ea27e",
+        "android_client_info": {
+          "package_name": "com.example.cp_proj"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "567850228059-vqcjhrfuqi6l6981ak2kuumbcdjaprjq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAp1PQpN6ilcUtbMNsH3R0MEUis85OdjA8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "567850228059-vqcjhrfuqi6l6981ak2kuumbcdjaprjq.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "567850228059-k4oc4vo1g114dg91bqb9fv9le3a5ks6k.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.artieConn"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
