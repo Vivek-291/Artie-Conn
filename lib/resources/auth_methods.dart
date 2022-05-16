@@ -1,10 +1,8 @@
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:cp_proj/models/user.dart' as model;
 import 'package:cp_proj/resources/storage_methods.dart';
-
 
 class AuthMethods {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -15,7 +13,7 @@ class AuthMethods {
     User currentUser = _auth.currentUser!;
 
     DocumentSnapshot documentSnapshot =
-        await _firestore.collection('users').doc(currentUser.uid).get();
+    await _firestore.collection('users').doc(currentUser.uid).get();
 
     return model.User.fromSnap(documentSnapshot);
   }
@@ -27,6 +25,7 @@ class AuthMethods {
     required String password,
     required String username,
     required String bio,
+    required List interests,
     required Uint8List file,
   }) async {
     String res = "Some error Occurred";
@@ -35,6 +34,7 @@ class AuthMethods {
           password.isNotEmpty ||
           username.isNotEmpty ||
           bio.isNotEmpty ||
+          interests.isNotEmpty ||
           file != null) {
         // registering user in auth with email and password
         UserCredential cred = await _auth.createUserWithEmailAndPassword(
@@ -43,7 +43,7 @@ class AuthMethods {
         );
 
         String photoUrl =
-            await StorageMethods().uploadImageToStorage('profilePics', file, false);
+        await StorageMethods().uploadImageToStorage('profilePics', file, false);
 
         model.User _user = model.User(
           username: username,
@@ -53,6 +53,8 @@ class AuthMethods {
           bio: bio,
           followers: [],
           following: [],
+          connections: [],
+          interests : []
         );
 
         // adding user in our database

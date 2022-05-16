@@ -1,32 +1,40 @@
 import 'dart:typed_data';
 
+import 'package:cp_proj/resources/auth_methods.dart';
 import 'package:cp_proj/screens/login_screen.dart';
 import 'package:cp_proj/screens/signup_screen.dart';
 import 'package:cp_proj/widgets/text_field_input.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
-
+import 'package:fluttertoast/fluttertoast.dart';
 import '../choice_screen.dart';
 import '../responsive/mobile_screen_layout.dart';
 import '../responsive/responsive_layout.dart';
 import '../responsive/web_screen_layout.dart';
 import '../utils/colors.dart';
 import '../utils/dimensions.dart';
+import '../utils/utils.dart';
 
 
 class SignupScreen extends StatefulWidget {
-  const SignupScreen({Key? key}) : super(key: key);
+  const SignupScreen({Key? key, required List<String> interestsList}) : super(key: key);
 
   @override
   _SignupScreenState createState() => _SignupScreenState();
 }
+
+
 class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _bioController = TextEditingController();
+  final List _list = interestsList;
   bool _isLoading = false;
   Uint8List? _image;
+
+  static List get interestsList => interestsList;
 
   @override
   void dispose() {
@@ -36,6 +44,50 @@ class _SignupScreenState extends State<SignupScreen> {
     _usernameController.dispose();
   }
 
+  void signUpUser() async {
+    // set loading to true
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    // signup user using our authmethodds
+    String res = await AuthMethods().signUpUser(
+        email: _emailController.text,
+        password: _passwordController.text,
+        username: _usernameController.text,
+        bio: _bioController.text,
+        interests : _list,
+        file: _image!);
+    // if string returned is sucess, user has been created
+    if (res == "success") {
+      setState(() {
+        _isLoading = false;
+      });
+      // navigate to the home screen
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const ResponsiveLayout(
+            mobileScreenLayout: MobileScreenLayout(),
+            webScreenLayout: WebScreenLayout(),
+          ),
+        ),
+      );
+    } else {
+      setState(() {
+        _isLoading = false;
+      });
+      // show the error
+      showSnackBar(context, res);
+    }
+  }
+  selectImage() async {
+    Uint8List im = await pickImage(ImageSource.gallery);
+    // set state because we need to display the image we selected on the circle avatar
+    setState(() {
+      _image = im;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,13 +116,23 @@ class _SignupScreenState extends State<SignupScreen> {
                 //Circular input for image or profile.
                 Stack(
                   children: [
-                    CircleAvatar(
+                    _image != null
+                        ? CircleAvatar(
                       radius: 44,
-                      backgroundImage: NetworkImage('https://tse1.mm.bing.net/th?id=OIP.gy2uNwmnAhxDAl261eO_rwHaJQ&pid=Api&rs=1&c=1&qlt=95&w=98&h=122'),
+                      backgroundImage: MemoryImage(_image!),
+                      backgroundColor: Colors.red,
+                    )
+                        : const CircleAvatar(
+                      radius: 44,
+                      backgroundImage: NetworkImage(
+                          'https://i.stack.imgur.com/l60Hf.png'),
+                      backgroundColor: Colors.red,
                     ),
                     Positioned(
+                      bottom: -15,
+                        left: 53,
                         child: IconButton(
-                          onPressed: () {},
+                        onPressed: selectImage,
                           icon: const Icon(
                               Icons.add_a_photo),
                         ),
@@ -106,6 +168,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   height: 24,
                 ),
                 TextFieldInput(
+
                   hintText: 'Enter your bio',
                   textInputType: TextInputType.text,
                   textEditingController: _bioController,
@@ -125,31 +188,34 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                     ),
                     child: Text("Select Interests"),
-
                     onPressed: () {
-
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => ChipDemo()),
-                      );
+                      _selectInterestsBottomSheet(context);
                     },
                   ),
                 ),
                 const SizedBox(
                   height: 24,
                 ),
-                Container(
-                  child: const Text('Sign Up'),
-                  width: double.infinity,
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  decoration: const ShapeDecoration(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(4))
+                InkWell(
+                  child: Container(
+                    child: !_isLoading
+                        ? const Text(
+                      'Sign up',
+                    )
+                        : const CircularProgressIndicator(
+                      color: primaryColor,
                     ),
-                    color : buttonColor,
+                    width: double.infinity,
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    decoration: const ShapeDecoration(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(4)),
+                      ),
+                      color: buttonColor,
+                    ),
                   ),
-
+                  onTap: signUpUser,
                 ),
                 const SizedBox(
                   height: 14,
@@ -165,7 +231,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       child: const Text(
                         'Already have an account?',
                       ),
-                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      padding: const EdgeInsets.symmetric(vertical: 30),
                     ),
                     GestureDetector(
                       onTap: () => Navigator.of(context).push(
@@ -180,7 +246,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        padding: const EdgeInsets.symmetric(vertical: 30),
                       ),
                     ),
                   ],
@@ -191,4 +257,23 @@ class _SignupScreenState extends State<SignupScreen> {
       ),
     );
   }
+
+  void _selectInterestsBottomSheet(context) {
+    showModalBottomSheet(context: context, isScrollControlled: true, builder: (BuildContext bc){
+
+      return FractionallySizedBox(
+          heightFactor: 0.7,
+
+        child: Container(
+          decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(50))
+          ),
+          height: MediaQuery.of(context).size.height * .90,
+          child : ChipDemo()
+          )
+        );
+      }
+    );
+  }
+
 }

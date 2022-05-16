@@ -1,6 +1,9 @@
+import 'package:cp_proj/screens/signup_screen.dart';
 import 'package:cp_proj/utils/colors.dart';
 import 'package:cp_proj/utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
 
 
 class ChipDemo extends StatefulWidget {
@@ -10,16 +13,19 @@ class ChipDemo extends StatefulWidget {
 
 class _ChipDemoState extends State<ChipDemo> {
   late GlobalKey<ScaffoldState> _key;
-  late bool _isSelected;
+  // late bool _isSelected;
   late List<InterestsWidget> _interests;
   late List<String> _filters;
+  late List<String> selectedProgrammingList;
+  late String stringLen;
 
   @override
   void initState() {
     super.initState();
     _key = GlobalKey<ScaffoldState>();
-    _isSelected = false;
+    // _isSelected = false;
     _filters = <String>[];
+    stringLen = _filters.length.toString();
     _interests = <InterestsWidget>[
       InterestsWidget('Art'),
       InterestsWidget('Music'),
@@ -42,25 +48,52 @@ class _ChipDemoState extends State<ChipDemo> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _key,
-      appBar: AppBar(
-        title: Text("Select your Interests.."),
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-      ),
       body: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-
+          children: <Widget>
+          [
+            const Text('Select Interestes',
+                style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20)),
+            const SizedBox(height: 20),
             Wrap(
               children: interestName.toList(),
             ),
-            // _buildChoiceChips(),
+            const SizedBox(height: 20),
+            Container(
+              child: ElevatedButton(
+
+                style: ButtonStyle(
+                  alignment: Alignment.center,
+                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
+
+                        (Set<MaterialState> states) {
+                      if (states.contains(MaterialState.pressed))
+                        return buttonColor;
+                      return buttonColor; // Use the component's default.
+                    },
+                  ),
+                ),
+                child: const Text("Done",
+                    style: TextStyle(
+                    fontSize: 20)),
+
+                onPressed: () {
+
+                  Navigator.of(context).pop(MaterialPageRoute(builder: (context) => SignupScreen(interestsList :_filters)
+                      )
+                  );
+                },
+              ),
+            ),
           ],
+
         ),
-      )
-      ,
+      ),
+
     );
   }
 
@@ -74,7 +107,7 @@ class _ChipDemoState extends State<ChipDemo> {
             backgroundColor: Colors.cyan,
             child: Text(
               intrsts.name[0].toUpperCase(),
-              style: TextStyle(color: Colors.white),
+              style: const TextStyle(color: Colors.white),
             ),
           ),
           label: Text(
@@ -82,20 +115,25 @@ class _ChipDemoState extends State<ChipDemo> {
           ),
           selected: _filters.contains(intrsts.name),
           selectedColor: chioceSelected,
-          onSelected: (bool selected) {
-            setState(() {
+          onSelected: (selected) {
+            setState(()
+            {
               if (selected) {
                 _filters.add(intrsts.name);
               } else {
                 _filters.removeWhere((String name) {
                   return name == intrsts.name;
+
                 });
               }
-            });
-          },
+            }
+            );
+            stringLen = _filters.length.toString();
+            },
         )
       );
     }
+
   }
 
 }

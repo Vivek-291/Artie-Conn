@@ -3,11 +3,13 @@ import 'package:cp_proj/widgets/text_field_input.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../resources/auth_methods.dart';
 import '../responsive/mobile_screen_layout.dart';
 import '../responsive/responsive_layout.dart';
 import '../responsive/web_screen_layout.dart';
 import '../utils/colors.dart';
 import '../utils/dimensions.dart';
+import '../utils/utils.dart';
 
 
 class LoginScreen extends StatefulWidget {
@@ -29,6 +31,32 @@ class _LoginScreenState extends State<LoginScreen> {
     _passwordController.dispose();
   }
 
+  void loginUser() async {
+    setState(() {
+      _isLoading = true;
+    });
+    String res = await AuthMethods().loginUser(
+        email: _emailController.text, password: _passwordController.text);
+    if (res == 'success') {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (context) => const ResponsiveLayout(
+              mobileScreenLayout: MobileScreenLayout(),
+              webScreenLayout: WebScreenLayout(),
+            ),
+          ),
+              (route) => false);
+
+      setState(() {
+        _isLoading = false;
+      });
+    } else {
+      setState(() {
+        _isLoading = false;
+      });
+      showSnackBar(context, res);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,11 +80,11 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 Flexible(
                   child: Container(),
-                  flex: 2,
+                  flex: 1,
                 ),
                 Image.asset(
-                  'lib/assets/logo_21.png',
-                  height: 100,
+                  'lib/assets/logo_fin1.jpeg',
+                  height: 200,
                 ),
                 const SizedBox(
                   height: 64,
@@ -78,18 +106,26 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(
                   height: 24,
                 ),
-                Container(
-                  child: const Text('Log In'),
-                  width: double.infinity,
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  decoration: const ShapeDecoration(
+                InkWell(
+                  child: Container(
+                    child: !_isLoading
+                        ? const Text(
+                      'Log in',
+                    )
+                        : const CircularProgressIndicator(
+                      color: primaryColor,
+                    ),
+                    width: double.infinity,
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    decoration: const ShapeDecoration(
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(4))
+                        borderRadius: BorderRadius.all(Radius.circular(4)),
                       ),
-                    color: buttonColor,
+                      color: buttonColor  ,
+                    ),
                   ),
-
+                  onTap: loginUser,
                 ),
                 const SizedBox(
                     height: 12,
@@ -105,12 +141,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: const Text(
                         'Dont have an account?',
                       ),
-                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      padding: const EdgeInsets.symmetric(vertical: 30),
                     ),
                     GestureDetector(
                       onTap: () => Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => const SignupScreen(),
+                          builder: (context) => const SignupScreen(interestsList: [],),
                         ),
                       ),
                       child: Container(
@@ -120,7 +156,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        padding: const EdgeInsets.symmetric(vertical: 30),
                       ),
                     ),
                   ],
