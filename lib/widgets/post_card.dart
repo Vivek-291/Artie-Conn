@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cp_proj/dialog/confirmation_dialog.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cp_proj/models/user.dart' as model;
 import 'package:cp_proj/providers/user_provider.dart';
@@ -10,6 +12,8 @@ import 'package:cp_proj/utils/utils.dart';
 import 'package:cp_proj/widgets/like_animation.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:giffy_dialog/giffy_dialog.dart';
 
 class PostCard extends StatefulWidget {
   final snap;
@@ -239,44 +243,61 @@ class _PostCardState extends State<PostCard> {
                   icon: const Icon(
                     Icons.handshake,
                   ),
-                  onPressed: () => {
-                        AlertDialog(
-                          title: const Text('AlertDialog Title'),
-                          content: SingleChildScrollView(
-                            child: ListBody(
-                              children: const <Widget>[
-                                Text('Ask for Collab??'),
-                                Text(
-                                    'Would you like to approve of this message?'),
-                              ],
-                            ),
-                          ),
-                          actions: <Widget>[
-                            TextButton(
-                              child: const Text('Approve'),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                            TextButton(
-                              child: const Text('Approve'),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                          ],
-                        ),
-                      }),
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (_) => NetworkGiffyDialog(
+                              image: Image.network(
+                                  "https://lmk.suppi.net/Funstuff/Animated%20Gifs/shake-hands.gif",
+                                  fit: BoxFit.cover),
+                              title: Text(
+                                  'Do you want to ping @' +
+                                      widget.snap['username'].toString() +
+                                      ' for collab ?',
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                      fontSize: 19.0,
+                                      fontWeight: FontWeight.w600)
+                              ),
+                              description: const Text(
+                                'This is will send a notification to the user, if he / she accepts it then good for both..',
+                                textAlign: TextAlign.center,
+                              ),
+                              onOkButtonPressed: () => Fluttertoast.showToast(
+                                  msg: "Working on it",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.CENTER,
+                                  timeInSecForIosWeb: 1,
+                                  backgroundColor: Colors.red,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0),
+                            ));
+                  }),
               IconButton(
                   icon: const Icon(
                     Icons.send,
                   ),
-                  onPressed: () {}),
+                  onPressed: () => Fluttertoast.showToast(
+                      msg: "Working on it",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.red,
+                      textColor: Colors.white,
+                      fontSize: 16.0)),
               Expanded(
                   child: Align(
                 alignment: Alignment.bottomRight,
                 child: IconButton(
-                    icon: const Icon(Icons.bookmark_border), onPressed: () {}),
+                    icon: const Icon(Icons.bookmark_border),
+                    onPressed: () => Fluttertoast.showToast(
+                        msg: "Working on it",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0)),
               ))
             ],
           ),

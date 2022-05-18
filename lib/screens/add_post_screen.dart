@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cp_proj/providers/user_provider.dart';
@@ -41,10 +40,20 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 }),
             SimpleDialogOption(
                 padding: const EdgeInsets.all(20),
+                child: const Text('Take a video'),
+                onPressed: () async {
+                  Navigator.pop(context);
+                  Uint8List file = await pickVideo(ImageSource.camera);
+                  setState(() {
+                    _file = file;
+                  });
+                }),
+            SimpleDialogOption(
+                padding: const EdgeInsets.all(20),
                 child: const Text('Choose from Gallery'),
                 onPressed: () async {
                   Navigator.of(context).pop();
-                  Uint8List file = await pickImage(ImageSource.gallery);
+                  Uint8List file = await pickVideo(ImageSource.gallery);
                   setState(() {
                     _file = file;
                   });
@@ -60,6 +69,43 @@ class _AddPostScreenState extends State<AddPostScreen> {
         );
       },
     );
+  }
+
+  void postVideo(String uid, String username, String profImage) async {
+    setState(() {
+      isLoading = true;
+    });
+    // start the loading
+    try {
+      // upload to storage and db
+      String res = await FireStoreMethods().uploadPost(
+        _descriptionController.text,
+        _file!,
+        uid,
+        username,
+        profImage,
+      );
+      if (res == "success") {
+        setState(() {
+          isLoading = false;
+        });
+        showSnackBar(
+          context,
+          'Posted!',
+        );
+        clearImage();
+      } else {
+        showSnackBar(context, res);
+      }
+    } catch (err) {
+      setState(() {
+        isLoading = false;
+      });
+      showSnackBar(
+        context,
+        err.toString(),
+      );
+    }
   }
 
   void postImage(String uid, String username, String profImage) async {
@@ -123,51 +169,51 @@ class _AddPostScreenState extends State<AddPostScreen> {
               ),
               onPressed: () => _selectImage(context),
             ),
-    )
+          )
         : Scaffold(
-          appBar: AppBar(
-            backgroundColor: mobileBackgroundColor,
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: clearImage,
-            ),
-            title: const Text(
-              'Post to',
-            ),
-            centerTitle: false,
-            actions: <Widget>[
-              TextButton(
-                onPressed: () => postImage(
-                  userProvider.getUser.uid,
-                  userProvider.getUser.username,
-                  userProvider.getUser.photoUrl,
-                ),
-                child: const Text(
-                  "Post",
-                  style: TextStyle(
-                      color: Colors.blueAccent,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16.0),
-                ),
-              )
-            ],
-          ),
-              // POST FORM
-              body: Column(
-        children: <Widget>[
-          isLoading
-              ? const LinearProgressIndicator()
-              : const Padding(padding: EdgeInsets.only(top: 0.0)),
-                 const Divider(),
-                 Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                   CircleAvatar(
-                backgroundImage: NetworkImage(
-                  userProvider.getUser.photoUrl,
-                ),
+            appBar: AppBar(
+              backgroundColor: mobileBackgroundColor,
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: clearImage,
               ),
+              title: const Text(
+                'Post to',
+              ),
+              centerTitle: false,
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => postImage(
+                    userProvider.getUser.uid,
+                    userProvider.getUser.username,
+                    userProvider.getUser.photoUrl,
+                  ),
+                  child: const Text(
+                    "Post",
+                    style: TextStyle(
+                        color: Colors.blueAccent,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16.0),
+                  ),
+                )
+              ],
+            ),
+            // POST FORM
+            body: Column(
+              children: <Widget>[
+                isLoading
+                    ? const LinearProgressIndicator()
+                    : const Padding(padding: EdgeInsets.only(top: 0.0)),
+                const Divider(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    CircleAvatar(
+                      backgroundImage: NetworkImage(
+                        userProvider.getUser.photoUrl,
+                      ),
+                    ),
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.3,
                       child: TextField(
@@ -186,18 +232,18 @@ class _AddPostScreenState extends State<AddPostScreen> {
                         child: Container(
                           decoration: BoxDecoration(
                               image: DecorationImage(
-                                fit: BoxFit.fill,
-                                alignment: FractionalOffset.topCenter,
-                                image: MemoryImage(_file!),
-                              )),
+                            fit: BoxFit.fill,
+                            alignment: FractionalOffset.topCenter,
+                            image: MemoryImage(_file!),
+                          )),
                         ),
                       ),
                     ),
                   ],
                 ),
                 const Divider(),
-        ],
-      ),
-    );
+              ],
+            ),
+          );
   }
 }

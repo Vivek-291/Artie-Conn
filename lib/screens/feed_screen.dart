@@ -25,10 +25,15 @@ class _FeedScreenState extends State<FeedScreen> {
           : AppBar(
               backgroundColor: mobileBackgroundColor,
               centerTitle: false,
-              title: SvgPicture.asset(
-                'lib/assets/artie_conn.svg',
-                color: primaryColor,
-                height: 32,
+              title:const Text(
+                ' Artie-Conn',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 30.0,
+                    fontStyle: FontStyle.italic,
+                    fontFamily: 'cursive'
+                ),
               ),
             actions: [
               IconButton(

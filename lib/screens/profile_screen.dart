@@ -95,7 +95,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
               actions: <Widget>[
                 FirebaseAuth.instance.currentUser!.uid ==
                     widget.uid
-                ? const Text('')
+                ? IconButton(
+                    icon: const Icon(MdiIcons.accountEdit),
+                    onPressed: () => {},
+            )
                     : isFollowing
                     ? FollowButton(
                       function: () async {

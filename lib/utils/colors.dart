@@ -8,7 +8,8 @@ const blueColor = Color.fromRGBO(0, 149, 246, 1.0);
 const buttonColor =  Color(0xE3FF0CE7);
 const primaryColor = Colors.white;
 const secondaryColor = Colors.grey;
-
+const Color kcRedColor = Color(0xfff44336);
+const Color kcOrangeColor = Color(0xffff9800);
 const choiceSelected = const Color(0xFF2E7D32);
 const choiceUnselected  = const Color(0xFF0097A7);
 
