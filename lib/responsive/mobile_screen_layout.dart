@@ -49,48 +49,49 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: PageView(
+        physics: const NeverScrollableScrollPhysics(),
         children: homeScreenItems,
         controller: pageController,
         onPageChanged: onPageChanged,
       ),
       bottomNavigationBar: GNav(
-        backgroundColor: mobileBackgroundColor,
+        backgroundColor: bottomnavBackgroundColor,
         tabBackgroundGradient: const LinearGradient(
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
           colors: [Colors.black87, Colors.black],
         ),
-        gap: 6,
-        tabBorderRadius: 10,
+        gap: 4 ,
+        tabBorderRadius: 5,
         color: Colors.grey[600],
         activeColor: Colors.white,
-        iconSize: 14,
-        textStyle: const TextStyle(fontSize: 12, color: Colors.white),
+        iconSize: 18,
+        // textStyle: const TextStyle(fontSize: 12, color: Colors.white),
         tabBackgroundColor: Colors.grey[800]!,
         padding:
-        const EdgeInsets.symmetric(horizontal: 15, vertical: 16.5),
+        const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
         duration: const Duration(milliseconds: 200),
         tabs: const [
           GButton(
             icon: LineIcons.home,
-            text: 'Home',
+            // text: 'Home',
           ),
           GButton(
             icon: LineIcons.search,
-            text: 'Search',
+            // text: 'Search',
           ),
           GButton(
             icon: LineIcons.plusCircle,
-            text: 'Add Post',
+            // text: 'Add Post',
           ),
           GButton(
             icon: LineIcons.heart,
-            text: 'Notifications',
+            // text: 'Notifications',
           ),
 
           GButton(
             icon: LineIcons.user,
-            text: 'Profile',
+            // text: 'Profile',
           ),
         ],
         onTabChange: navigationTapped,

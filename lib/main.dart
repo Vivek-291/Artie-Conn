@@ -3,8 +3,6 @@ import 'package:cp_proj/responsive/mobile_screen_layout.dart';
 import 'package:cp_proj/responsive/responsive_layout.dart';
 import 'package:cp_proj/responsive/web_screen_layout.dart';
 import 'package:cp_proj/screens/login_screen.dart';
-import 'package:cp_proj/screens/signup_screen.dart';
-import 'package:cp_proj/screens/test.dart';
 import 'package:cp_proj/utils/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -80,7 +78,7 @@ class MyApp extends StatelessWidget {
 
           return const LoginScreen();
         },
-      ),
+       ),
       ),
     );
   }

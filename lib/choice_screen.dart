@@ -82,8 +82,16 @@ class _ChipDemoState extends State<ChipDemo> {
                     fontSize: 20)),
 
                 onPressed: () {
-
-                  Navigator.of(context).pop(MaterialPageRoute(builder: (context) => SignupScreen(interestsList :_filters)
+                  Fluttertoast.showToast(
+                      msg : _filters.length.toString(),
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.red,
+                      textColor: Colors.white,
+                      fontSize: 16.0
+                  );
+                  Navigator.of(context).pop(MaterialPageRoute(builder: (context) => const SignupScreen()
                       )
                   );
                 },
@@ -102,7 +110,7 @@ class _ChipDemoState extends State<ChipDemo> {
       yield Padding(
         padding: const EdgeInsets.all(6.0),
         child: FilterChip(
-          backgroundColor: chioceUnselected,
+          backgroundColor: choiceUnselected,
           avatar: CircleAvatar(
             backgroundColor: Colors.cyan,
             child: Text(
@@ -114,7 +122,7 @@ class _ChipDemoState extends State<ChipDemo> {
             intrsts.name,
           ),
           selected: _filters.contains(intrsts.name),
-          selectedColor: chioceSelected,
+          selectedColor: choiceSelected,
           onSelected: (selected) {
             setState(()
             {

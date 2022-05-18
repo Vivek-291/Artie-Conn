@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cp_proj/widgets/connect_button.dart';
+import 'package:cp_proj/widgets/foll_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cp_proj/resources/auth_methods.dart';
@@ -7,8 +8,8 @@ import 'package:cp_proj/resources/firestore_methods.dart';
 import 'package:cp_proj/screens/login_screen.dart';
 import 'package:cp_proj/utils/colors.dart';
 import 'package:cp_proj/utils/utils.dart';
-import 'package:cp_proj/widgets/connect_button.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import '../resources/auth_methods.dart';
 import '../resources/firestore_methods.dart';
@@ -49,7 +50,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           .doc(widget.uid)
           .get();
 
-      // get post lENGTH
       var postSnap = await FirebaseFirestore.instance
           .collection('posts')
           .where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
@@ -92,11 +92,82 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 userData['username'],
               ),
               centerTitle: false,
+              actions: <Widget>[
+                FirebaseAuth.instance.currentUser!.uid ==
+                    widget.uid
+                ? const Text('')
+                    : isFollowing
+                    ? FollowButton(
+                      function: () async {
+                        await FireStoreMethods()
+                            .followUser(
+                          FirebaseAuth.instance
+                              .currentUser!.uid,
+                          userData['uid'],
+                        );
+                        Fluttertoast.showToast(
+                            msg: "Login User" +
+                                FirebaseAuth
+                                    .instance
+                                    .currentUser!
+                                    .uid +
+                                " Unfollowed : " +
+                                userData['uid'],
+                            toastLength:
+                            Toast.LENGTH_SHORT,
+                            gravity:
+                            ToastGravity.CENTER,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor:
+                            Colors.red,
+                            textColor: Colors.white,
+                            fontSize: 16.0);
+                        setState(() {
+                          isFollowing = false;
+                          followers--;
+                        });
+                      },
+                        icon: const Icon(MdiIcons.accountCheck),
+                )
+                :FollowButton(
+
+                function: () async {
+                    await FireStoreMethods()
+                        .followUser(
+                      FirebaseAuth.instance
+                          .currentUser!.uid,
+                      userData['uid'],
+                    );
+                    Fluttertoast.showToast(
+                        msg: "Login User" +
+                            FirebaseAuth
+                                .instance
+                                .currentUser!
+                                .uid +
+                            " Followed : " +
+                            userData['uid'],
+                        toastLength:
+                        Toast.LENGTH_SHORT,
+                        gravity:
+                        ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor:
+                        Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0);
+
+                    setState(() {
+                      isFollowing = true;
+                      followers++;
+                    });
+                  }, icon: const Icon(Icons.person_add_alt_1_rounded),
+                )
+              ],
             ),
             body: ListView(
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(14),
                   child: Column(
                     children: [
                       Row(
@@ -122,7 +193,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     buildStatColumn(following, "following"),
                                   ],
                                 ),
-                                Row(
+                                Column(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
                                   children: [

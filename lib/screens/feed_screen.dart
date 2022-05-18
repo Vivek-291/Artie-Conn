@@ -36,7 +36,12 @@ class _FeedScreenState extends State<FeedScreen> {
                   Icons.messenger_outline,
                   color: primaryColor,
                 ),
-            onPressed: () {},
+                  onPressed: () {
+                    // Navigator.push(
+                    //   context,
+                    //   // MaterialPageRoute(builder: (context) => const ChatScreen()),
+                    // );
+            },
           ),
         ],
       ),

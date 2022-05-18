@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cp_proj/models/user.dart' as model;
 import 'package:cp_proj/resources/storage_methods.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthMethods {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -95,6 +97,17 @@ class AuthMethods {
     }
     return res;
   }
+
+
+  Future resetPass(String email) async {
+    try {
+      return await _auth.sendPasswordResetEmail(email: email);
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
 
   Future<void> signOut() async {
     await _auth.signOut();

@@ -113,44 +113,44 @@ class _PostCardState extends State<PostCard> {
                 ),
                 widget.snap['uid'].toString() == user.uid
                     ? IconButton(
-                  onPressed: () {
-                    showDialog(
-                      useRootNavigator: false,
-                      context: context,
-                      builder: (context) {
-                        return Dialog(
-                          child: ListView(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 16),
-                              shrinkWrap: true,
-                              children: [
-                                'Delete',
-                              ]
-                                  .map(
-                                    (e) => InkWell(
-                                    child: Container(
-                                      padding:
-                                      const EdgeInsets.symmetric(
-                                          vertical: 12,
-                                          horizontal: 16),
-                                      child: Text(e),
-                                    ),
-                                    onTap: () {
-                                      deletePost(
-                                        widget.snap['postId']
-                                            .toString(),
-                                      );
-                                      // remove the dialog box
-                                      Navigator.of(context).pop();
-                                    }),
-                              )
-                                  .toList()),
-                        );
-                      },
-                    );
-                  },
-                  icon: const Icon(Icons.more_vert),
-                )
+                        onPressed: () {
+                          showDialog(
+                            useRootNavigator: false,
+                            context: context,
+                            builder: (context) {
+                              return Dialog(
+                                child: ListView(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 16),
+                                    shrinkWrap: true,
+                                    children: [
+                                      'Delete',
+                                    ]
+                                        .map(
+                                          (e) => InkWell(
+                                              child: Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 12,
+                                                        horizontal: 16),
+                                                child: Text(e),
+                                              ),
+                                              onTap: () {
+                                                deletePost(
+                                                  widget.snap['postId']
+                                                      .toString(),
+                                                );
+                                                // remove the dialog box
+                                                Navigator.of(context).pop();
+                                              }),
+                                        )
+                                        .toList()),
+                              );
+                            },
+                          );
+                        },
+                        icon: const Icon(Icons.more_vert),
+                      )
                     : Container(),
               ],
             ),
@@ -210,12 +210,12 @@ class _PostCardState extends State<PostCard> {
                 child: IconButton(
                   icon: widget.snap['likes'].contains(user.uid)
                       ? const Icon(
-                    Icons.favorite,
-                    color: Colors.red,
-                  )
+                          Icons.favorite,
+                          color: Colors.red,
+                        )
                       : const Icon(
-                    Icons.favorite_border,
-                  ),
+                          Icons.favorite_border,
+                        ),
                   onPressed: () => FireStoreMethods().likePost(
                     widget.snap['postId'].toString(),
                     user.uid,
@@ -240,32 +240,33 @@ class _PostCardState extends State<PostCard> {
                     Icons.handshake,
                   ),
                   onPressed: () => {
-                    AlertDialog(title: const Text('AlertDialog Title'),
-                      content: SingleChildScrollView(
-                        child: ListBody(
-                          children: const <Widget>[
-                            Text('Ask for Collab??'),
-                            Text('Would you like to approve of this message?'),
+                        AlertDialog(
+                          title: const Text('AlertDialog Title'),
+                          content: SingleChildScrollView(
+                            child: ListBody(
+                              children: const <Widget>[
+                                Text('Ask for Collab??'),
+                                Text(
+                                    'Would you like to approve of this message?'),
+                              ],
+                            ),
+                          ),
+                          actions: <Widget>[
+                            TextButton(
+                              child: const Text('Approve'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            TextButton(
+                              child: const Text('Approve'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
                           ],
                         ),
-                      ),
-                      actions: <Widget>[
-                        TextButton(
-                            child: const Text('Approve'),
-                              onPressed: () {
-                            Navigator.of(context).pop();
-                            },
-                          ),
-                        TextButton(
-                          child: const Text('Approve'),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                        ],
-                      ),
-                    }
-                  ),
+                      }),
               IconButton(
                   icon: const Icon(
                     Icons.send,
@@ -273,10 +274,10 @@ class _PostCardState extends State<PostCard> {
                   onPressed: () {}),
               Expanded(
                   child: Align(
-                    alignment: Alignment.bottomRight,
-                    child: IconButton(
-                        icon: const Icon(Icons.bookmark_border), onPressed: () {}),
-                  ))
+                alignment: Alignment.bottomRight,
+                child: IconButton(
+                    icon: const Icon(Icons.bookmark_border), onPressed: () {}),
+              ))
             ],
           ),
           //DESCRIPTION AND NUMBER OF COMMENTS

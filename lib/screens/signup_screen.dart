@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:cp_proj/models/demo.dart';
 import 'package:cp_proj/resources/auth_methods.dart';
 import 'package:cp_proj/screens/login_screen.dart';
 import 'package:cp_proj/screens/signup_screen.dart';
@@ -18,7 +19,8 @@ import '../utils/utils.dart';
 
 
 class SignupScreen extends StatefulWidget {
-  const SignupScreen({Key? key, required List<String> interestsList}) : super(key: key);
+  const SignupScreen( {Key? key, }) : super(key: key);
+
 
   @override
   _SignupScreenState createState() => _SignupScreenState();
@@ -30,11 +32,12 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _bioController = TextEditingController();
-  final List _list = interestsList;
   bool _isLoading = false;
   Uint8List? _image;
 
-  static List get interestsList => interestsList;
+
+
+
 
   @override
   void dispose() {
@@ -57,8 +60,9 @@ class _SignupScreenState extends State<SignupScreen> {
         password: _passwordController.text,
         username: _usernameController.text,
         bio: _bioController.text,
-        interests : _list,
-        file: _image!);
+        file: _image!,
+        interests: [],
+    );
     // if string returned is sucess, user has been created
     if (res == "success") {
       setState(() {
@@ -192,6 +196,30 @@ class _SignupScreenState extends State<SignupScreen> {
                       _selectInterestsBottomSheet(context);
                     },
                   ),
+                ),Center(
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                            (Set<MaterialState> states) {
+                          if (states.contains(MaterialState.pressed))
+                            return buttonColor;
+                          return buttonColor; // Use the component's default.
+                        },
+                      ),
+                    ),
+                    child: const Text("Show Interests"),
+                    onPressed: () {
+                      Fluttertoast.showToast(
+                          msg : "DEmo",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                          fontSize: 16.0
+                      );
+                    },
+                  ),
                 ),
                 const SizedBox(
                   height: 24,
@@ -240,12 +268,14 @@ class _SignupScreenState extends State<SignupScreen> {
                         ),
                       ),
                       child: Container(
+
                         child: const Text(
                           ' LogIn.',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
+
                         padding: const EdgeInsets.symmetric(vertical: 30),
                       ),
                     ),
@@ -265,11 +295,13 @@ class _SignupScreenState extends State<SignupScreen> {
           heightFactor: 0.7,
 
         child: Container(
+
           decoration: const BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(50))
           ),
           height: MediaQuery.of(context).size.height * .90,
           child : ChipDemo()
+
           )
         );
       }
