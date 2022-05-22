@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cp_proj/Chatroom/Chatroom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:cp_proj/utils/colors.dart';
@@ -41,12 +42,13 @@ class _FeedScreenState extends State<FeedScreen> {
                   Icons.messenger_outline,
                   color: primaryColor,
                 ),
-                  onPressed: () {
-                    // Navigator.push(
-                    //   context,
-                    //   // MaterialPageRoute(builder: (context) => const ChatScreen()),
-                    // );
-            },
+                onPressed: () =>
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            ChatRoom(),
+                      ),
+                    ),
           ),
         ],
       ),

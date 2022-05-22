@@ -29,7 +29,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   int postLen = 0;
   int followers = 0;
   int connections = 0;
+  int requests = 0;
   bool isConnected = false;
+  bool isRequested = false;
   int following = 0;
   bool isFollowing = false;
   bool isLoading = false;
@@ -60,12 +62,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
       followers = userSnap.data()!['followers'].length;
       following = userSnap.data()!['following'].length;
       connections = userSnap.data()!['connections'].length;
+      requests = userSnap.data()!['requests'].length;
       isFollowing = userSnap
           .data()!['followers']
           .contains(FirebaseAuth.instance.currentUser!.uid);
       setState(() {});
       isConnected = userSnap
           .data()!['connections']
+          .contains(FirebaseAuth.instance.currentUser!.uid);
+      setState(() {});
+
+      isRequested = userSnap
+          .data()!['requests']
           .contains(FirebaseAuth.instance.currentUser!.uid);
       setState(() {});
     } catch (e) {
@@ -96,10 +104,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 FirebaseAuth.instance.currentUser!.uid ==
                     widget.uid
                 ? IconButton(
-                    icon: const Icon(MdiIcons.accountEdit),
-                    onPressed: () => {},
-            )
-                    : isFollowing
+                      onPressed: () {},
+                      icon: const Icon(MdiIcons.accountEdit),
+                    )
+                   : isFollowing
                     ? FollowButton(
                       function: () async {
                         await FireStoreMethods()
@@ -115,7 +123,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     .currentUser!
                                     .uid +
                                 " Unfollowed : " +
-                                userData['uid'],
+                                userData['username'],
                             toastLength:
                             Toast.LENGTH_SHORT,
                             gravity:
@@ -148,7 +156,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 .currentUser!
                                 .uid +
                             " Followed : " +
-                            userData['uid'],
+                            userData['username'],
                         toastLength:
                         Toast.LENGTH_SHORT,
                         gravity:
@@ -191,12 +199,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    buildStatColumn(connections, "connections"),
-                                    buildStatColumn(followers, "followers"),
-                                    buildStatColumn(following, "following"),
+                                    buildStatColumn(connections, "Connections"),
+                                    buildStatColumn(followers, "Followers"),
+                                    buildStatColumn(requests, "Requests"),
                                   ],
                                 ),
-                                Column(
+                                Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
@@ -252,7 +260,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   setState(() {
                                                     isConnected = false;
                                                     connections--;
-                                                  });
+                                                  }
+                                                  );
                                                 },
                                               )
                                             : ConnectButton(
@@ -290,7 +299,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                     connections++;
                                                   });
                                                 },
-                                              )
+                                              ),
+                                    FirebaseAuth.instance.currentUser!.uid == widget.uid
+                                        ? Text('')
+                                    : IconButton(
+                                      onPressed: () {},
+                                          icon: const Icon(MdiIcons.message),
+                                    )
                                   ],
                                 ),
                               ],

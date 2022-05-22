@@ -1,15 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+
+class UserField {
+  static const String lastMessageTime = 'lastMessageTime';
+}
+
 class User {
   final String email;
   final String uid;
   final String photoUrl;
   final String username;
   final String bio;
+  final String status;
   final List followers;
   final List connections;
   final List following;
   final List interests;
+  final List requests;
 
   const User(
       {
@@ -21,7 +28,11 @@ class User {
         required this.connections,
         required this.followers,
         required this.following,
-        required this.interests
+        required this.interests,
+        required this.status,
+        required this.requests,
+
+
         }
       );
 
@@ -38,6 +49,8 @@ class User {
       following: snapshot["following"],
       connections: snapshot["connections"],
       interests: snapshot["interests"],
+      status: snapshot["status"],
+      requests: snapshot["requests"]
     );
   }
 
@@ -50,6 +63,8 @@ class User {
         "followers": followers,
         "following": following,
         "connections" : connections,
-        "interests" : interests
+        "interests" : interests,
+        "status": status,
+        "requests" : requests
       };
 }

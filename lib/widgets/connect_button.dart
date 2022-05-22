@@ -29,17 +29,23 @@ class ConnectButton extends StatelessWidget {
             ),
             borderRadius: BorderRadius.circular(5),
           ),
-          alignment: Alignment.center,
-          child: Text(
+
+          child:Align(
+            alignment: Alignment.center,
+
+            child: Text(
             text,
+            textAlign: TextAlign.center,
             style: TextStyle(
               color: textColor,
               fontWeight: FontWeight.bold,
+              ),
             ),
           ),
-          width: 250,
-          height: 27,
-        ),
+          width: 180,
+          height: 30,
+
+        )
       ),
     );
   }

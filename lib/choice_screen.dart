@@ -82,6 +82,7 @@ class _ChipDemoState extends State<ChipDemo> {
                     fontSize: 20)),
 
                 onPressed: () {
+                  print(_filters);
                   Fluttertoast.showToast(
                       msg : _filters.length.toString(),
                       toastLength: Toast.LENGTH_SHORT,
@@ -91,7 +92,7 @@ class _ChipDemoState extends State<ChipDemo> {
                       textColor: Colors.white,
                       fontSize: 16.0
                   );
-                  Navigator.of(context).pop(MaterialPageRoute(builder: (context) => const SignupScreen()
+                  Navigator.of(context).pop(MaterialPageRoute(builder: (context) => SignupScreen()
                       )
                   );
                 },

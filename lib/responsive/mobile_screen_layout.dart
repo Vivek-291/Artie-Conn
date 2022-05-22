@@ -1,6 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cp_proj/providers/user_provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cp_proj/models/user.dart' as model;
@@ -59,39 +56,33 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
         tabBackgroundGradient: const LinearGradient(
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
-          colors: [Colors.black87, Colors.black],
+          colors: [Colors.lightBlue, Colors.cyanAccent],
         ),
         gap: 4 ,
+        tabActiveBorder: Border.all(color: Colors.black, width: 1),
         tabBorderRadius: 5,
         color: Colors.grey[600],
-        activeColor: Colors.white,
+        activeColor: Colors.black,
         iconSize: 18,
-        // textStyle: const TextStyle(fontSize: 12, color: Colors.white),
-        tabBackgroundColor: Colors.grey[800]!,
-        padding:
-        const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+        tabBackgroundColor: Colors.black54,
+        padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
         duration: const Duration(milliseconds: 200),
         tabs: const [
           GButton(
             icon: LineIcons.home,
-            // text: 'Home',
           ),
           GButton(
             icon: LineIcons.search,
-            // text: 'Search',
           ),
           GButton(
             icon: LineIcons.plusCircle,
-            // text: 'Add Post',
           ),
           GButton(
-            icon: LineIcons.heart,
-            // text: 'Notifications',
+            icon: LineIcons.bell,
           ),
 
           GButton(
             icon: LineIcons.user,
-            // text: 'Profile',
           ),
         ],
         onTabChange: navigationTapped,

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cp_proj/providers/user_provider.dart';
 import 'package:cp_proj/responsive/mobile_screen_layout.dart';
 import 'package:cp_proj/responsive/responsive_layout.dart';
@@ -9,6 +10,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:cp_proj/Chatroom/ChatRoomHelper.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
 
@@ -33,6 +35,8 @@ void main() async{
   runApp(const MyApp());
 }
 
+final activityRef = FirebaseFirestore.instance.collection('feed');
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -40,8 +44,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
      providers : [
-       ChangeNotifierProvider(create: (_) => UserProvider()
-       )
+       ChangeNotifierProvider(create: (_) => UserProvider(),),
+       ChangeNotifierProvider(create: (_) => ChatRoomHelper(),),
+
      ],
       child: MaterialApp(
       title: 'Artie-Conn',
@@ -80,6 +85,7 @@ class MyApp extends StatelessWidget {
         },
        ),
       ),
+
     );
   }
 }

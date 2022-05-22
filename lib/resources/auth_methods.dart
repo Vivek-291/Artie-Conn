@@ -56,8 +56,11 @@ class AuthMethods {
           followers: [],
           following: [],
           connections: [],
-          interests : []
+          interests : [],
+          requests: [],
+          status: 'Unavailable'
         );
+
 
         // adding user in our database
         await _firestore

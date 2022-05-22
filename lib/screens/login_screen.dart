@@ -1,3 +1,4 @@
+import 'package:cp_proj/screens/forgotpassword_screen.dart';
 import 'package:cp_proj/screens/signup_screen.dart';
 import 'package:cp_proj/widgets/text_field_input.dart';
 import 'package:flutter/cupertino.dart';
@@ -130,6 +131,26 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(
                     height: 12,
                 ),
+                GestureDetector(
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const ForgotPasswordScreen(),
+                    ),
+                  ),
+                  child: Container(
+                    alignment: Alignment.centerRight,
+                    child: const Text(
+                      ' Forgot Password?',
+                      style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                  ),
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
                 Flexible(
                   child: Container(),
                   flex: 2,
@@ -146,7 +167,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     GestureDetector(
                       onTap: () => Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => const SignupScreen(),
+                          builder: (context) => SignupScreen(),
                         ),
                       ),
                       child: Container(

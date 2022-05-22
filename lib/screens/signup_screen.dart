@@ -22,18 +22,24 @@ class SignupScreen extends StatefulWidget {
   const SignupScreen( {Key? key, }) : super(key: key);
 
 
+
   @override
   _SignupScreenState createState() => _SignupScreenState();
 }
 
 
 class _SignupScreenState extends State<SignupScreen> {
+
+
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _bioController = TextEditingController();
   bool _isLoading = false;
   Uint8List? _image;
+
+  static List filters = filters;
+
 
 
 
@@ -172,7 +178,6 @@ class _SignupScreenState extends State<SignupScreen> {
                   height: 24,
                 ),
                 TextFieldInput(
-
                   hintText: 'Enter your bio',
                   textInputType: TextInputType.text,
                   textEditingController: _bioController,
@@ -201,8 +206,9 @@ class _SignupScreenState extends State<SignupScreen> {
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.resolveWith<Color>(
                             (Set<MaterialState> states) {
-                          if (states.contains(MaterialState.pressed))
+                          if (states.contains(MaterialState.pressed)) {
                             return buttonColor;
+                          }
                           return buttonColor; // Use the component's default.
                         },
                       ),
@@ -210,7 +216,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     child: const Text("Show Interests"),
                     onPressed: () {
                       Fluttertoast.showToast(
-                          msg : "DEmo",
+                          msg : "Working",
                           toastLength: Toast.LENGTH_SHORT,
                           gravity: ToastGravity.CENTER,
                           timeInSecForIosWeb: 1,
@@ -293,11 +299,13 @@ class _SignupScreenState extends State<SignupScreen> {
 
       return FractionallySizedBox(
           heightFactor: 0.7,
-
         child: Container(
-
-          decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(50))
+          decoration:  BoxDecoration(
+              border: Border.all(
+                color: Colors.red,
+                width: 5,
+              ),
+              borderRadius: BorderRadius.only(topLeft : Radius.circular(12.0) , topRight: Radius.circular(12.0))
           ),
           height: MediaQuery.of(context).size.height * .90,
           child : ChipDemo()

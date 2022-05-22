@@ -1,13 +1,21 @@
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cp_proj/main.dart';
 import 'package:cp_proj/models/post.dart';
 import 'package:cp_proj/resources/storage_methods.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:uuid/uuid.dart';
 
 class FireStoreMethods {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  createChatRoom(String chatRoomId, chatRoomMap){
+    FirebaseFirestore.instance.collection('chatRoom').doc(chatRoomId).set(chatRoomMap).catchError((e){
+        print(e.toString());
+    });
+  }
 
   Future uploadToStorage() async {
     try {
@@ -106,6 +114,38 @@ class FireStoreMethods {
     return res;
   }
 
+  Future<void> requestUser(
+      String uid,
+      String requestId
+      ) async {
+    try {
+      DocumentSnapshot snap = await _firestore.collection('users').doc(uid).get();
+      List requests = (snap.data()! as dynamic)['requests'];
+
+      if(requests.contains(requestId)) {
+        await _firestore.collection('users').doc(requestId).update({
+          'requests': FieldValue.arrayRemove([uid])
+        });
+        // await _firestore.collection('users').doc(uid).update({
+        //   'requests': FieldValue.arrayRemove([requestId])
+        // });
+
+      }
+
+      else {
+        await _firestore.collection('users').doc(requestId).update({
+          'requests': FieldValue.arrayUnion([uid])
+        });
+        // await _firestore.collection('users').doc(uid).update({
+        //   'requests': FieldValue.arrayUnion([requestId])
+        // });
+
+      }
+
+    } catch(e) {
+      print(e.toString());
+    }
+  }
   Future<void> connectUser(
       String uid,
       String connectId
@@ -168,4 +208,5 @@ class FireStoreMethods {
       print(e.toString());
     }
   }
+
 }
